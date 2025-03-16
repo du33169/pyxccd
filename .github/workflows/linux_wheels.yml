@@ -36,6 +36,9 @@ jobs:
       if: runner.os == 'Linux' && matrix.arch != 'auto'
       with:
         platforms: all
+
+    - name: Install the latest version of uv
+      uses: astral-sh/setup-uv@v5
     - name: Build binary wheels
       uses: pypa/cibuildwheel@v2.23.0
       with:
@@ -95,11 +98,13 @@ jobs:
       with:
         name: wheels-${{ matrix.cibw-only }}
         path: wheelhouse
+    - name: Install the latest version of uv
+      uses: astral-sh/setup-uv@v5
     - name: Install wheel ${{ matrix.cibw-only }} with extras ${{ matrix.install-extras }}
       shell: bash
       env:
         INSTALL_EXTRAS: ${{ matrix.install-extras }}
-      run: pip install --prefer-binary "pyxccd[$INSTALL_EXTRAS]" -f wheelhouse # there should be only one wheel in the wheelhouse directory
+      run: uv pip install --prefer-binary "pyxccd[$INSTALL_EXTRAS]" -f wheelhouse # there should be only one wheel in the wheelhouse directory
 
     - name: Test wheel ${{ matrix.cibw-only }} with extras ${{ matrix.install-extras }}
       shell: bash
