@@ -46,8 +46,10 @@ jobs:
     - name: replace '\' to '/' in python path, only effective on windows 
       id: replace-path
       run: echo "py_path=$(echo "${{ steps.setup-python.outputs.python-path }}" | sed 's/\\/\//g')" >> $GITHUB_OUTPUT
+
     - name: Install the latest version of uv
       uses: astral-sh/setup-uv@v5
+
     - name: install cibuildwheel # cannot use pypa/cibuildwheel because we need to use msys2
       run: |
         ${{ steps.replace-path.outputs.py_path }} -m pip install cibuildwheel
@@ -56,8 +58,9 @@ jobs:
       run: |
         echo "using python at: ${{ steps.replace-path.outputs.py_path }}"
         ${{ steps.replace-path.outputs.py_path }} -m cibuildwheel --only ${{ matrix.cibw-only }}
-      # env: # whether to test the wheels after building
-      #   CIBW_TEST_SKIP: "*"
+      env: 
+        CIBW_BUILD_FRONTEND: 'build[uv]'
+      #   CIBW_TEST_SKIP: "*" # whether to test the wheels after building
 
     - name: Show built files
       run: ls -la wheelhouse
@@ -113,7 +116,7 @@ jobs:
       env:
         INSTALL_EXTRAS: ${{ matrix.install-extras }}
       run: |
-        uv pip install --only-binary :all: "pyxccd[$($env:INSTALL_EXTRAS)]" -f wheelhouse # there should be only one wheel in the wheelhouse directory
+        uv pip install --system --only-binary :all: "pyxccd[$($env:INSTALL_EXTRAS)]" -f wheelhouse # there should be only one wheel in the wheelhouse directory
 
     - name: Test wheel ${{ matrix.cibw-only }} with extras ${{ matrix.install-extras }}
       shell: powershell

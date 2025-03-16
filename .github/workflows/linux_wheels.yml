@@ -45,6 +45,7 @@ jobs:
         output-dir: wheelhouse
         config-file: pyproject.toml
       env:
+        CIBW_BUILD_FRONTEND: 'build[uv]'
         CIBW_BUILD: "${{ matrix.cibw-only }}"
     - name: Show built files
       shell: bash
@@ -105,7 +106,7 @@ jobs:
       env:
         INSTALL_EXTRAS: ${{ matrix.install-extras }}
       run: |
-        uv pip install --only-binary :all: "pyxccd[$INSTALL_EXTRAS]" -f wheelhouse # there should be only one wheel in the wheelhouse directory
+        uv pip install --system --only-binary :all: "pyxccd[$INSTALL_EXTRAS]" -f wheelhouse # there should be only one wheel in the wheelhouse directory
 
     - name: Test wheel ${{ matrix.cibw-only }} with extras ${{ matrix.install-extras }}
       shell: bash
