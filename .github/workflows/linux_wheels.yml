@@ -104,7 +104,8 @@ jobs:
       shell: bash
       env:
         INSTALL_EXTRAS: ${{ matrix.install-extras }}
-      run: uv pip install --prefer-binary "pyxccd[$INSTALL_EXTRAS]" -f wheelhouse # there should be only one wheel in the wheelhouse directory
+      run: |
+        uv pip install --only-binary :all: "pyxccd[$INSTALL_EXTRAS]" -f wheelhouse # there should be only one wheel in the wheelhouse directory
 
     - name: Test wheel ${{ matrix.cibw-only }} with extras ${{ matrix.install-extras }}
       shell: bash
