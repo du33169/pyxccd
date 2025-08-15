@@ -25,7 +25,7 @@ mod_name = "pyxccd"
 repo_name = "pyxccd"
 rel_mod_parent_dpath = "src/python"
 os = [ 
-    #"osx",
+    "osx",
     "linux", 
     "win", 
     #"all"
@@ -69,6 +69,11 @@ build-verbosity = 1
 [tool.cibuildwheel.windows]
     archs = ["AMD64"]
     #archs = ["i686"]
+
+[tool.cibuildwheel.macos]
+    archs = ["arm64"]
+    # archs = ["universal2"] # singlewheel run on both x86_64 and apple silicon arm64
+    before-build = "brew install gsl gcc"
 
 [tool.mypy]
 ignore_missing_imports = true

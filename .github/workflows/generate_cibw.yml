@@ -5,13 +5,13 @@ on:
       platform:
         required: true
         type: string
-        description: The platform to generate cibw list for, can be "windows" or "linux"
+        description: The platform to generate cibw list for, can be "windows", "linux" or "macos"
     outputs:
       cibw-list:
         description: The generated cibw list in JSON format
-        value: ${{ jobs.generate_windows_cibw_list.outputs.cibw-list }}
+        value: ${{ jobs.generate_cibw_list.outputs.cibw-list }}
 jobs:
-  generate_windows_cibw_list:
+  generate_cibw_list:
     runs-on: ubuntu-latest
     outputs:
       cibw-list: ${{ steps.set-cibw-list.outputs.cibw-list }}
